@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { DefaultAppRoute } from '../../../core/users/interfaces/default-app-route.type';
 import { PreferencesService } from '../../../core/users/services/preferences.service';
 
 @Component({
@@ -20,7 +21,9 @@ export class ToolsPageComponent {
     showWelcomeBanner: new FormControl(true, { nonNullable: true }),
     compactTaskCards: new FormControl(false, { nonNullable: true }),
     inAppNotifications: new FormControl(true, { nonNullable: true }),
-    defaultRoute: new FormControl('/app/tarefas', { nonNullable: true }),
+    defaultRoute: new FormControl<DefaultAppRoute>('/app/tarefas', {
+      nonNullable: true,
+    }),
   });
 
   constructor() {

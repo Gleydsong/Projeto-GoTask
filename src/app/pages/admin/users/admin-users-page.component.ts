@@ -4,7 +4,11 @@ import { Component, inject } from '@angular/core';
 import { PasswordResetModalComponent } from '../../../components/password-reset-modal/password-reset-modal.component';
 import { UserFormModalComponent } from '../../../components/user-form-modal/user-form-modal.component';
 import { UserEntity } from '../../../core/users/interfaces/user.entity';
-import { UserService } from '../../../core/users/services/user.service';
+import {
+  CreateUserPayload,
+  UpdateUserPayload,
+  UserService,
+} from '../../../core/users/services/user.service';
 
 @Component({
   selector: 'app-admin-users-page',
@@ -28,12 +32,13 @@ export class AdminUsersPageComponent {
     });
 
     dialogRef.closed.subscribe((payload) => {
-      if (!payload) {
+      const typedPayload = payload as CreateUserPayload | undefined;
+      if (!typedPayload) {
         return;
       }
 
       try {
-        this._userService.createUser(payload);
+        this._userService.createUser(typedPayload);
         this.feedbackMessage = 'Usuário criado com sucesso.';
         this.errorMessage = '';
       } catch (error) {
@@ -50,12 +55,13 @@ export class AdminUsersPageComponent {
     });
 
     dialogRef.closed.subscribe((payload) => {
-      if (!payload) {
+      const typedPayload = payload as UpdateUserPayload | undefined;
+      if (!typedPayload) {
         return;
       }
 
       try {
-        this._userService.updateUser(user.id, payload);
+        this._userService.updateUser(user.id, typedPayload);
         this.feedbackMessage = 'Usuário atualizado com sucesso.';
         this.errorMessage = '';
       } catch (error) {
@@ -85,11 +91,12 @@ export class AdminUsersPageComponent {
     });
 
     dialogRef.closed.subscribe((password) => {
-      if (!password) {
+      const nextPassword = password as string | undefined;
+      if (!nextPassword) {
         return;
       }
 
-      this._userService.resetUserPassword(user.id, password);
+      this._userService.resetUserPassword(user.id, nextPassword);
       this.feedbackMessage = 'Senha redefinida com sucesso.';
       this.errorMessage = '';
     });

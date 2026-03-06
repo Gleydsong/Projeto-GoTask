@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { SessionStoreService } from '../../core/auth/services/session-store.service';
 import { TaskStatusEnum } from '../../enums/task-status.enum';
 
 import { TaskCommentsModalComponent } from './task-comments-modal.component';
@@ -16,16 +17,29 @@ describe('TaskCommentsModalComponent', () => {
           provide: DIALOG_DATA,
           useValue: {
             id: 'task-1',
+            ownerId: 'seed-employer',
             name: 'Tarefa de teste',
             description: 'Descrição da tarefa de teste',
             comments: [],
             status: TaskStatusEnum.TODO,
+            createdAt: '2026-03-06T00:00:00.000Z',
+            updatedAt: '2026-03-06T00:00:00.000Z',
+            completedAt: null,
+            order: 0,
           },
         },
         {
           provide: DialogRef,
           useValue: {
             close: jasmine.createSpy('close'),
+          },
+        },
+        {
+          provide: SessionStoreService,
+          useValue: {
+            currentUserSnapshot: {
+              id: 'seed-employer',
+            },
           },
         },
       ],

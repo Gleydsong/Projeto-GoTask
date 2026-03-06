@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { SessionStoreService } from '../../core/auth/services/session-store.service';
+import { PreferencesService } from '../../core/users/services/preferences.service';
 import { ModalControllerService } from '../../services/modal-controller.service';
 import { TaskService } from '../../services/task.service';
 
@@ -23,6 +25,39 @@ describe('WelcomeSectionComponent', () => {
           provide: TaskService,
           useValue: {
             addTask: jasmine.createSpy('addTask'),
+          },
+        },
+        {
+          provide: SessionStoreService,
+          useValue: {
+            currentUser$: of({
+              id: 'seed-employer',
+              name: 'GoTask Employer',
+              email: 'employer@gotask.local',
+              role: 'employer',
+              active: true,
+              avatarUrl: null,
+              jobTitle: '',
+              department: '',
+              bio: '',
+              phone: '',
+              location: '',
+              createdAt: '',
+              updatedAt: '',
+            }),
+          },
+        },
+        {
+          provide: PreferencesService,
+          useValue: {
+            getCurrentUserPreferences: () =>
+              of({
+                userId: 'seed-employer',
+                showWelcomeBanner: true,
+                compactTaskCards: false,
+                inAppNotifications: true,
+                defaultRoute: '/app/tarefas',
+              }),
           },
         },
       ],

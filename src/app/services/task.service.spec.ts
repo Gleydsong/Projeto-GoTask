@@ -1,17 +1,34 @@
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
+import { SessionStoreService } from '../core/auth/services/session-store.service';
+import { STORAGE_KEYS } from '../core/shared/constants/storage-keys.const';
 import { TaskStatusEnum } from '../enums/task-status.enum';
-import { ITask } from '../interfaces/task.interface';
 import { TaskService } from './task.service';
 
 describe('TaskService', () => {
   beforeEach(() => {
     localStorage.clear();
     TestBed.configureTestingModule({});
+    const sessionStore = TestBed.inject(SessionStoreService);
+    sessionStore.setCurrentUser({
+      id: 'seed-employer',
+      name: 'GoTask Employer',
+      email: 'employer@gotask.local',
+      role: 'employer',
+      active: true,
+      avatarUrl: null,
+      jobTitle: '',
+      department: '',
+      bio: '',
+      phone: '',
+      location: '',
+      createdAt: '',
+      updatedAt: '',
+    });
   });
 
-  it('deve carregar cada coluna da chave correta no localStorage', async () => {
-    const todoTasks: ITask[] = [
+  it('deve migrar as tarefas legadas para o usuário autenticado', async () => {
+    const todoTasks = [
       {
         id: 'todo-1',
         name: 'Tarefa TODO',
@@ -20,7 +37,7 @@ describe('TaskService', () => {
         status: TaskStatusEnum.TODO,
       },
     ];
-    const doingTasks: ITask[] = [
+    const doingTasks = [
       {
         id: 'doing-1',
         name: 'Tarefa DOING',
@@ -29,7 +46,7 @@ describe('TaskService', () => {
         status: TaskStatusEnum.DOING,
       },
     ];
-    const doneTasks: ITask[] = [
+    const doneTasks = [
       {
         id: 'done-1',
         name: 'Tarefa DONE',
@@ -44,10 +61,12 @@ describe('TaskService', () => {
     localStorage.setItem(TaskStatusEnum.DONE, JSON.stringify(doneTasks));
 
     const service = TestBed.inject(TaskService);
+    service.migrateLegacyTasksToUser('seed-employer');
 
-    expect(await firstValueFrom(service.todoTasks)).toEqual(todoTasks);
-    expect(await firstValueFrom(service.doingTasks)).toEqual(doingTasks);
-    expect(await firstValueFrom(service.doneTasks)).toEqual(doneTasks);
+    expect((await firstValueFrom(service.todoTasks))[0].ownerId).toBe('seed-employer');
+    expect((await firstValueFrom(service.doingTasks))[0].ownerId).toBe('seed-employer');
+    expect((await firstValueFrom(service.doneTasks))[0].ownerId).toBe('seed-employer');
+    expect(localStorage.getItem(STORAGE_KEYS.migrationV1)).toBe('true');
   });
 
   it('deve criar nova tarefa em TODO com comentários vazios', async () => {
