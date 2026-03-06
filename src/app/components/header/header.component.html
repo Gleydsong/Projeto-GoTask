@@ -1,18 +1,105 @@
-<header class="bg-[#FAFAFA] py-3 px-6 w-full flex">
-  <div class="flex items-center gap-2">
-    <img class="w-5" src="images/icon-logo.svg" />
-    <h1 class="font-bold">GoTask</h1>
-  </div>
-  <nav class="ml-auto flex gap-6">
-    <button class="bg-white p-2 rounded-xl">
-      <img class="w-5" src="images/icon-notification.svg" />
-    </button>
-    <div class="flex items-center gap-3">
-      <img class="w-7" src="images/icon-user-avatar.svg" />
-      <span class="font-bold">Jennie K.</span>
-      <button class="w-3">
-        <img class="w-3" src="images/icon-sign-out.svg" />
-      </button>
+@if (viewModel$ | async; as vm) {
+  <header class="rounded-[28px] border border-white/80 bg-white/90 px-5 py-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] backdrop-blur">
+    <div class="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8">
+        <a class="flex items-center gap-3" routerLink="/app/tarefas">
+          <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0f172a] shadow-lg">
+            <img class="w-5" src="images/icon-logo.svg" alt="Logo GoTask" />
+          </span>
+          <div>
+            <p class="text-lg font-black text-slate-900">GoTask</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Workspace autenticado
+            </p>
+          </div>
+        </a>
+
+        <nav class="flex flex-wrap gap-2">
+          <a
+            class="rounded-2xl px-4 py-2 text-sm font-semibold text-slate-500 transition hover:bg-[#f3f8ff] hover:text-slate-900 [&.active]:bg-[#0f172a] [&.active]:text-white"
+            routerLink="/app/tarefas"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Tarefas
+          </a>
+          <a
+            class="rounded-2xl px-4 py-2 text-sm font-semibold text-slate-500 transition hover:bg-[#f3f8ff] hover:text-slate-900 [&.active]:bg-[#0f172a] [&.active]:text-white"
+            routerLink="/app/usuario/perfil"
+            routerLinkActive="active"
+          >
+            Usuário
+          </a>
+          @if (vm.currentUser?.role === 'admin') {
+            <a
+              class="rounded-2xl px-4 py-2 text-sm font-semibold text-slate-500 transition hover:bg-[#f3f8ff] hover:text-slate-900 [&.active]:bg-[#0f172a] [&.active]:text-white"
+              routerLink="/app/admin/usuarios"
+              routerLinkActive="active"
+            >
+              Admin
+            </a>
+          }
+        </nav>
+      </div>
+
+      @if (vm.currentUser) {
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center">
+          <div class="flex flex-wrap gap-2">
+            <a
+              class="rounded-2xl border border-[#dce5f2] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 transition hover:border-[#2A89EF] hover:text-[#2A89EF]"
+              routerLink="/app/usuario/perfil"
+            >
+              Perfil
+            </a>
+            <a
+              class="rounded-2xl border border-[#dce5f2] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 transition hover:border-[#2A89EF] hover:text-[#2A89EF]"
+              routerLink="/app/usuario/ferramentas"
+            >
+              Ferramentas
+            </a>
+            <a
+              class="rounded-2xl border border-[#dce5f2] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 transition hover:border-[#2A89EF] hover:text-[#2A89EF]"
+              routerLink="/app/usuario/historico"
+            >
+              Histórico
+            </a>
+          </div>
+
+          <div class="flex items-center gap-3 rounded-[24px] border border-[#e4ebf5] bg-[#f8fbff] px-4 py-3">
+            <button
+              class="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#dbe4f2] bg-white"
+              type="button"
+              [class.opacity-40]="!vm.preferences?.inAppNotifications"
+              [disabled]="!vm.preferences?.inAppNotifications"
+            >
+              <img class="w-5" src="images/icon-notification.svg" alt="Notificações" />
+            </button>
+
+            @if (vm.currentUser.avatarUrl) {
+              <img
+                class="h-11 w-11 rounded-2xl object-cover"
+                [src]="vm.currentUser.avatarUrl"
+                [alt]="'Avatar de ' + vm.currentUser.name"
+              />
+            } @else {
+              <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0f172a] text-sm font-black text-white">
+                {{ getUserInitials(vm.currentUser.name) }}
+              </div>
+            }
+
+            <div class="min-w-0">
+              <p class="truncate text-sm font-bold text-slate-900">{{ vm.currentUser.name }}</p>
+              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#2A89EF]">
+                {{ vm.currentUser.role }}
+              </p>
+            </div>
+
+            <button class="flex h-9 w-9 items-center justify-center rounded-xl border border-[#dbe4f2] bg-white" type="button" (click)="logout()">
+              <img class="w-3" src="images/icon-sign-out.svg" alt="Sair" />
+            </button>
+          </div>
+        </div>
+      }
     </div>
-  </nav>
-</header>
+  </header>
+}

@@ -1,10 +1,3 @@
-import { TaskStatus } from '../types/task-status';
-import { IComment } from './comment.interface';
+import { TaskEntity } from '../core/tasks/interfaces/task-entity.interface';
 
-export interface ITask {
-  id: string;
-  name: string;
-  description: string;
-  comments: IComment[];
-  status: TaskStatus;
-}
+export type ITask = TaskEntity;

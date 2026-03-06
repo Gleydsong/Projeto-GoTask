@@ -1,0 +1,99 @@
+<section class="flex flex-col gap-6">
+  <div class="flex flex-col gap-4 rounded-[28px] border border-[#dce5f2] bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.05)] lg:flex-row lg:items-end lg:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#2A89EF]">
+        Administração
+      </p>
+      <h1 class="mt-2 text-3xl font-black text-slate-900">Gestão de usuários</h1>
+      <p class="mt-2 text-sm text-slate-500">
+        Crie usuários, ajuste roles, ative ou desative acessos e redefina senhas.
+      </p>
+    </div>
+
+    <button
+      class="rounded-2xl bg-[#0f172a] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+      type="button"
+      (click)="openCreateUserModal()"
+    >
+      Novo usuário
+    </button>
+  </div>
+
+  @if (feedbackMessage) {
+    <p class="rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">
+      {{ feedbackMessage }}
+    </p>
+  }
+
+  @if (errorMessage) {
+    <p class="rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+      {{ errorMessage }}
+    </p>
+  }
+
+  <div class="overflow-hidden rounded-[28px] border border-[#dce5f2] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.05)]">
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-left">
+        <thead class="bg-[#f8fbff] text-xs uppercase tracking-[0.18em] text-slate-500">
+          <tr>
+            <th class="px-5 py-4">Nome</th>
+            <th class="px-5 py-4">Email</th>
+            <th class="px-5 py-4">Role</th>
+            <th class="px-5 py-4">Status</th>
+            <th class="px-5 py-4">Criado em</th>
+            <th class="px-5 py-4 text-right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of (users$ | async); track user.id) {
+            <tr class="border-t border-[#edf2f7]">
+              <td class="px-5 py-4">
+                <p class="font-semibold text-slate-900">{{ user.name }}</p>
+                <p class="mt-1 text-sm text-slate-500">{{ user.jobTitle || 'Sem cargo definido' }}</p>
+              </td>
+              <td class="px-5 py-4 text-sm text-slate-600">{{ user.email }}</td>
+              <td class="px-5 py-4">
+                <span class="rounded-full bg-[#eff5ff] px-3 py-1 text-xs font-semibold text-[#2A89EF]">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td class="px-5 py-4">
+                <span
+                  class="rounded-full px-3 py-1 text-xs font-semibold"
+                  [class.bg-emerald-50]="user.active"
+                  [class.text-emerald-700]="user.active"
+                  [class.bg-slate-100]="!user.active"
+                  [class.text-slate-500]="!user.active"
+                >
+                  {{ user.active ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+              <td class="px-5 py-4 text-sm text-slate-500">
+                {{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+              </td>
+              <td class="px-5 py-4">
+                <div class="flex flex-wrap justify-end gap-2">
+                  <button class="rounded-xl border border-[#d7e0ec] px-3 py-2 text-xs font-semibold text-slate-600" type="button" (click)="openEditUserModal(user)">
+                    Editar
+                  </button>
+                  <button class="rounded-xl border border-[#d7e0ec] px-3 py-2 text-xs font-semibold text-slate-600" type="button" (click)="openPasswordResetModal(user)">
+                    Senha
+                  </button>
+                  <button
+                    class="rounded-xl px-3 py-2 text-xs font-semibold text-white"
+                    [class.bg-amber-500]="user.active"
+                    [class.bg-emerald-600]="!user.active"
+                    type="button"
+                    (click)="toggleUser(user)"
+                  >
+                    {{ user.active ? 'Desativar' : 'Ativar' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

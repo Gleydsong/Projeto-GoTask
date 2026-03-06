@@ -1,4 +1,3 @@
-export interface IComment {
-  id: string;
-  description: string;
-}
+import { TaskComment } from '../core/tasks/interfaces/task-comment.interface';
+
+export type IComment = TaskComment;

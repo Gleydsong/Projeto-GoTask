@@ -1,0 +1,50 @@
+<form class="overflow-hidden rounded-[28px] bg-white" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="border-b border-[#e6edf6] px-5 py-4">
+    <h2 class="text-xl font-black text-slate-900">
+      {{ dialogData.mode === 'create' ? 'Criar usuário' : 'Editar usuário' }}
+    </h2>
+  </div>
+
+  <div class="grid gap-4 px-5 py-5">
+    <div class="grid gap-4 md:grid-cols-2">
+      <input class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="name" type="text" placeholder="Nome" />
+      <input class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="email" type="email" placeholder="Email" />
+    </div>
+
+    @if (dialogData.mode === 'create') {
+      <input class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="password" type="password" placeholder="Senha temporária" />
+    }
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <select class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="role">
+        <option value="admin">admin</option>
+        <option value="employer">employer</option>
+      </select>
+      <label class="flex items-center gap-3 rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm text-slate-600">
+        <input formControlName="active" type="checkbox" />
+        Usuário ativo
+      </label>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <input class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="jobTitle" type="text" placeholder="Cargo" />
+      <input class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="department" type="text" placeholder="Departamento" />
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <input class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="phone" type="text" placeholder="Telefone" />
+      <input class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="location" type="text" placeholder="Localização" />
+    </div>
+
+    <textarea class="min-h-28 rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm" formControlName="bio" placeholder="Bio"></textarea>
+  </div>
+
+  <div class="flex justify-end gap-3 border-t border-[#e6edf6] px-5 py-4">
+    <button class="rounded-2xl border border-[#d7e0ec] px-4 py-3 text-sm font-semibold text-slate-600" type="button" (click)="closeModal()">
+      Cancelar
+    </button>
+    <button class="rounded-2xl bg-[#0f172a] px-4 py-3 text-sm font-semibold text-white" type="submit">
+      {{ dialogData.mode === 'create' ? 'Criar usuário' : 'Salvar alterações' }}
+    </button>
+  </div>
+</form>
