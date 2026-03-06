@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { TaskService } from '../../services/task.service';
 
 import { TaskListSectionComponent } from './task-list-section.component';
 
@@ -8,7 +10,19 @@ describe('TaskListSectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskListSectionComponent]
+      imports: [TaskListSectionComponent],
+      providers: [
+        {
+          provide: TaskService,
+          useValue: {
+            todoTasks: of([]),
+            doingTasks: of([]),
+            doneTasks: of([]),
+            updateTaskStatus: jasmine.createSpy('updateTaskStatus'),
+            reorderTask: jasmine.createSpy('reorderTask'),
+          },
+        },
+      ],
     })
     .compileComponents();
 

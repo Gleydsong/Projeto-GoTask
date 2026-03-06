@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { ModalControllerService } from '../../services/modal-controller.service';
+import { TaskService } from '../../services/task.service';
 
 import { WelcomeSectionComponent } from './welcome-section.component';
 
@@ -8,7 +11,21 @@ describe('WelcomeSectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WelcomeSectionComponent]
+      imports: [WelcomeSectionComponent],
+      providers: [
+        {
+          provide: ModalControllerService,
+          useValue: {
+            openNewTaskModal: () => ({ closed: of(undefined) }),
+          },
+        },
+        {
+          provide: TaskService,
+          useValue: {
+            addTask: jasmine.createSpy('addTask'),
+          },
+        },
+      ],
     })
     .compileComponents();
 

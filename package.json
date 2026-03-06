@@ -8,6 +8,10 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
+  "engines": {
+    "node": "20.x",
+    "npm": "10.x"
+  },
   "private": true,
   "dependencies": {
     "@angular/cdk": "^19.2.11",

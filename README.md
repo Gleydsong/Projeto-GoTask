@@ -2,6 +2,17 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
 
+## Requisitos de ambiente
+
+- Node.js `20.x` (recomendado via `.nvmrc`)
+- npm `10.x`
+
+Se você usa `nvm`:
+
+```bash
+nvm use
+```
+
 ## Development server
 
 To start a local development server, run:
